@@ -8,6 +8,9 @@
 
 <p align="center"><img src="https://codeberg.org/LibreLingoRelive/LibreLingoRelive/raw/commit/4166419b0aa57ac4c104d9c6899a2b316a10e193/apps/web/static/images/librelingorelive_screenshot.png" alt="LibreLingoRelive"></p>
 
+> [!CAUTION]
+> Not ready for production use. See [security issues](https://codeberg.org/LibreLingoRelive/LibreLingoRelive/issues/16).
+
 <p align="center">We want to create a language-learning platform that is owned by the community of its users. All software is licensed under AGPLv3, which guarantees the freedom to run, study, share, and modify the software. Course authors can choose their license freely. </p>
 
 # Why LibreLingoRelive?

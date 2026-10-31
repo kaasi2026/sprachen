@@ -30,12 +30,12 @@ function uniqBy<T>(array: T[], iteratee: keyof T | ((item: T) => unknown)): T[] 
 }
 
 // TODO: Revise this
-export const prepareChallenge = ({
+export const prepareChallenge = <T extends import('./types/types').ChoiceChallenge>({
 	currentChallenge,
 	alternativeChallenges,
 	typeToSelect,
 	hasFakeOption = null
-}) => {
+}: import('./types/types').PrepareChallengeArguments<T>): import('./types/types').PreparedChoice<T>[] => {
 	const numberOfCards = hasFakeOption ? 4 : 3;
 	const correctOption = {
 		...currentChallenge,
@@ -60,12 +60,12 @@ export const prepareChallenge = ({
 	const incorrectOptionsWithFake =
 		incorrectOptions.length >= 2
 			? [
-				{
-					...incorrectOptionsSample[0],
-					fake: true
-				},
-				...incorrectOptionsSample.slice(1)
-			]
+					{
+						...incorrectOptionsSample[0],
+						fake: true
+					},
+					...incorrectOptionsSample.slice(1)
+				]
 			: [];
 
 	return shuffle([correctOption, ...incorrectOptionsWithFake]);

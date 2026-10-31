@@ -1,5 +1,13 @@
 import { isStale } from './_logic';
 
+/**
+ * @typedef {{get: (id: string) => Promise<{practiced: import('../types').Practice[]}>}} SkillReader
+ */
+
+/**
+ * @param {SkillReader | null | undefined} db
+ * @param {{id: string}} params
+ */
 export default async (db, { id }) => {
 	if (!db) return null;
 

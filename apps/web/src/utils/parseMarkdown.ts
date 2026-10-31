@@ -1,4 +1,6 @@
-import showdown from 'showdown';
+import MarkdownIt from 'markdown-it';
+
+const markdown = new MarkdownIt({ html: false });
 
 export default function parseMarkdown(rawMarkdown: any) {
 	// Ensure rawMarkdown is a string
@@ -52,7 +54,5 @@ export default function parseMarkdown(rawMarkdown: any) {
 		console.warn('WARNING: Empty markdown text!');
 	}
 
-	const converter = new showdown.Converter();
-	const html = converter.makeHtml(markdownText);
-	return html;
+	return markdown.render(markdownText);
 }

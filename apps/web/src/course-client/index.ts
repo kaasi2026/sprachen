@@ -68,7 +68,16 @@ export type CourseDataType = {
 	specialCharacters: string[];
 };
 
-const formatCourseData = (rawCourseData, { courseName }) => {
+type RawSkillData = {
+	id: string;
+	levels: number;
+	challenges: unknown[];
+};
+
+const formatCourseData = (
+	rawCourseData: Omit<CourseDataType, 'courseName'>,
+	{ courseName }: { courseName: string }
+) => {
 	const { modules, languageName, repositoryURL, languageCode, specialCharacters } = rawCourseData;
 
 	return {
@@ -224,7 +233,10 @@ export const get_course = async ({
 	}
 };
 
-const formatSkilldata = async (skillData, { courseName, skillName }) => {
+const formatSkilldata = async (
+	skillData: RawSkillData,
+	{ courseName, skillName }: { courseName: string; skillName: string }
+) => {
 	const { languageName, languageCode, specialCharacters, repositoryURL } = await get_course({
 		courseName
 	});
@@ -273,7 +285,10 @@ export const get_skill_data = async ({
 	return await formatSkilldata(skillData, { courseName, skillName });
 };
 
-const formatSkillIntroduction = async (skill, { skillName, courseName, markdown }) => {
+const formatSkillIntroduction = async (
+	skill: Pick<SkillDataType, 'title' | 'practiceHref'>,
+	{ skillName, courseName, markdown }: { skillName: string; courseName: string; markdown: string }
+) => {
 	const safeMarkdown = typeof markdown === 'string' ? markdown : '';
 	const parsedMarkdown = safeMarkdown.trim() ? parseMarkdown(safeMarkdown) : '';
 

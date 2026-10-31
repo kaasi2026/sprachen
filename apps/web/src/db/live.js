@@ -1,6 +1,7 @@
 import isBrowser from '../utils/isBrowser';
 import db from './db';
 
+/** @param {(database: typeof db) => void} listener */
 export default (listener) => {
 	listener(db);
 	if (isBrowser() === true && process.env.JEST_WORKER_ID === undefined) {

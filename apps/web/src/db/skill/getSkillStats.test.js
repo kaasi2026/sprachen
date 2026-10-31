@@ -1,12 +1,15 @@
 import dayjs from 'dayjs';
 import getSkillStats from './getSkillStats';
 
+/** @param {import('../types').SkillDocument} resolvedValue */
 const createFakeDb = (resolvedValue) => ({
 	get: () => new Promise((resolve) => resolve(resolvedValue))
 });
 
 const createFailingFakeDb = () => ({
-	get: () => new Promise((_, reject) => reject())
+	get: async () => {
+		throw new Error('Database lookup failed');
+	}
 });
 
 describe('getSkillStats', function () {

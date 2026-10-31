@@ -1,16 +1,33 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import settings from '../settings';
+import settings from '../settings.js';
 import getUserDbName from './getUserDbName';
 import Cookies from 'js-cookie';
 import isBrowser from '../utils/isBrowser';
 
+/**
+ * @typedef {PouchDB.Database<import('./types').SkillDocument> & {
+ *   __reset?: () => Promise<void>
+ * }} AppDatabase
+ */
+
+/** @type {AppDatabase | undefined} */
 let db;
+/** @type {PouchDB.Database | undefined} */
 let remoteDB;
+/** @type {ReturnType<PouchDB.Database['sync']> | undefined} */
 let syncHandler;
 
+const loadPouchDB = () => {
+	/** @type {PouchDB.Static & {default?: PouchDB.Static}} */
+	const pouchDbModule = require('pouchdb');
+	return process.env.JEST_WORKER_ID !== undefined
+		? pouchDbModule
+		: (pouchDbModule.default ?? pouchDbModule);
+};
+
+/** @param {string} dbName */
 const createLocalPouchDb = (dbName) => {
-	const PouchDB =
-		process.env.JEST_WORKER_ID !== undefined ? require('pouchdb') : require('pouchdb').default;
+	const PouchDB = loadPouchDB();
 	const newDb = new PouchDB(dbName).setMaxListeners(settings.database.maxNumberOfListeners);
 
 	newDb
@@ -35,12 +52,11 @@ const createLocalPouchDb = (dbName) => {
 
 if (isBrowser() === true) {
 	const authStore = require('../auth').default;
-	const PouchDB = require('pouchdb').default;
+	const PouchDB = loadPouchDB();
 
 	// Connect to remote database
 	remoteDB = new PouchDB(`${settings.database.remote}/${Cookies.get('loginDb')}`, {
-		skip_setup: true,
-		live: true
+		skip_setup: true
 	});
 
 	// Connect to local database
@@ -93,7 +109,8 @@ if (isBrowser() === true) {
 		}
 
 		if (window._test_credentials_correct === true) {
-			return window._fakeLogin();
+			window._fakeLogin?.();
+			return;
 		}
 
 		const response = await (
@@ -124,7 +141,7 @@ if (isBrowser() === true) {
 		Cookies.set('loginDb', getUserDbName(username), {
 			expires: settings.database.auth.expireDays
 		});
-		window.location.reload(false);
+		window.location.reload();
 		window.location.href = '';
 	};
 
@@ -144,13 +161,14 @@ if (isBrowser() === true) {
 				user: null,
 				online: null
 			}));
-			await db.destroy();
-			window.location.reload(false);
+			await db?.destroy();
+			window.location.reload();
 		}
 	};
 
 	// Keep databases in sync
 	const startSync = () => {
+		if (!db || !remoteDB) return;
 		syncHandler = db
 			.sync(remoteDB)
 			.on('complete', function () {
@@ -164,13 +182,17 @@ if (isBrowser() === true) {
 
 if (process.env.JEST_WORKER_ID !== undefined) {
 	// This is a test database for Jest tests that can reset itself
-	db = createLocalPouchDb(settings.database.local);
-	db.__reset = async () => {
-		const allDocs = await db.allDocs();
+	const testDb = createLocalPouchDb(settings.database.local);
+	db = testDb;
+	testDb.__reset = async () => {
+		const allDocs = await testDb.allDocs();
 		await Promise.all(
-			allDocs.rows.map(function (row) {
-				return db.remove(row.id, row.value.rev);
-			})
+			allDocs.rows.map(
+				/** @param {{id: string; value: {rev: string}}} row */
+				function (row) {
+					return testDb.remove(row.id, row.value.rev);
+				}
+			)
 		);
 	};
 }

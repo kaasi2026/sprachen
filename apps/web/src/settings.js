@@ -6,7 +6,7 @@ const isDevelopment = !process.env.NODE_ENV || process.env.NODE_ENV === 'develop
 
 const database = !isDevelopment ? settings.database.production : settings.database.development;
 
-const authEnabled = Cookies.get('authEnabled') !== 'false' || process.browser;
+const authEnabled = Cookies.get('authEnabled') !== 'false' || typeof window !== 'undefined';
 
 export default {
 	...settings,

@@ -1,3 +1,7 @@
+/**
+ * @param {PouchDB.Database<import('../types').SkillDocument>} db
+ * @param {string} _id
+ */
 const getCurrentData = async (db, _id) => {
 	try {
 		return await db.get(_id);
@@ -9,6 +13,10 @@ const getCurrentData = async (db, _id) => {
 	}
 };
 
+/**
+ * @param {PouchDB.Database<import('../types').SkillDocument>} db
+ * @param {{id: string; correct: number; incorrect: number; skipped?: number}} practice
+ */
 export default async (db, { id, correct, incorrect, skipped }) => {
 	const doc = await getCurrentData(db, `skills/${id}`);
 

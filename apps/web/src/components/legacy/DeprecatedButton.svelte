@@ -1,8 +1,6 @@
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
-	import LinkOrButton from './primitives/LinkOrButton.svelte';
 	import Icon from 'components/Icon.svelte';
-	import Stack from 'components/Stack.svelte';
 
 	const dispatch = createEventDispatcher();
 	export let href: string | null = null;
@@ -22,18 +20,33 @@
 	class:large={size === 'large'}
 	data-style={style}
 >
-	<LinkOrButton {href} on:click={() => dispatch('click')} {type} {target} {tabIndex} {disabled}>
-		{#if loading}
-			<span class="spinner">
-				<Icon icon="spinner" />
-			</span>
-		{:else}
-			<Stack>
-				<div slot="icon-left"></div>
-				<slot />
-			</Stack>
-		{/if}
-	</LinkOrButton>
+	{#if href !== null}
+		<a {href} on:click={() => dispatch('click')} {target} tabindex={tabIndex}>
+			{#if loading}
+				<span class="spinner">
+					<Icon icon="spinner" />
+				</span>
+			{:else}
+				<div class="button-stack">
+					<div class="icon-left"></div>
+					<slot />
+				</div>
+			{/if}
+		</a>
+	{:else}
+		<button {type} on:click={() => dispatch('click')} tabindex={tabIndex} {disabled}>
+			{#if loading}
+				<span class="spinner">
+					<Icon icon="spinner" />
+				</span>
+			{:else}
+				<div class="button-stack">
+					<div class="icon-left"></div>
+					<slot />
+				</div>
+			{/if}
+		</button>
+	{/if}
 </div>
 
 {#if asHref != null}
@@ -50,6 +63,11 @@
 	.lluis-button {
 		display: inline-block;
 		max-width: 100%;
+	}
+
+	.button-stack {
+		display: flex;
+		align-items: center;
 	}
 
 	div > :global(*) {

@@ -22,9 +22,9 @@
 		title: string;
 		levels: number;
 		practiceHref: string;
-		introduction: string;
-		imageSet: string[];
-		summary: string;
+		introduction?: string;
+		imageSet?: string[];
+		summary: string[];
 	} = $props();
 
 	let completed: boolean = $state(false);

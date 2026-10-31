@@ -65,7 +65,7 @@ docker compose up -d
 
 # generate the audio
 # replace fr-from-en with your exact course name
-docker-compose exec librelingo python3 src/librelingo_audios/cli.py /data/courses/fr-from-en /apps/web/static/voice fr-from-en 
+docker compose exec librelingo python3 src/librelingo_audios/cli.py /data/courses/fr-from-en /apps/web/static/voice fr-from-en 
 
 # if you have once generated the audio it's better to copy paste the folder instead of generating it all the time
 

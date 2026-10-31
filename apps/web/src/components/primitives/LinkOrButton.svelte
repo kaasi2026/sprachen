@@ -11,7 +11,7 @@
 		label?: string | null;
 		onclick?: (e: MouseEvent) => void;
 		children: Snippet;
-	} & Record<string, any>
+	} & Record<string, any>;
 
 	// TODO: Check if this component is strictly necessary
 	let {

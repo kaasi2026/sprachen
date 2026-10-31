@@ -1,12 +1,13 @@
 // TODO: clean this up
 
+import type { PageServerLoad } from './$types';
 import { get_skill_introduction } from 'course-client';
 import parseMarkdown from '../../../../../../utils/parseMarkdown';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import { readdir, readFile } from 'fs/promises';
 
-const findFileRecursive = async (dir, fileName) => {
+const findFileRecursive = async (dir: string, fileName: string): Promise<string | null> => {
 	const entries = await readdir(dir, { withFileTypes: true });
 	for (const entry of entries) {
 		const candidate = path.join(dir, entry.name);
@@ -20,23 +21,28 @@ const findFileRecursive = async (dir, fileName) => {
 	return null;
 };
 
-const loadSourceMarkdown = async (courseName, skillName) => {
+const loadSourceMarkdown = async (courseName: string, skillName: string): Promise<string> => {
 	const __dirname = path.dirname(fileURLToPath(import.meta.url));
-	const workspaceRoot = path.resolve(__dirname, '../../../../../../..');
+	const workspaceRoot = path.resolve(__dirname, '../../../../../../../../..');
 	const courseRoot = path.join(workspaceRoot, 'courses', courseName);
 	const found = await findFileRecursive(courseRoot, `${skillName}.md`);
 	if (!found) return '';
 	return await readFile(found, 'utf-8');
 };
 
-export async function load(page) {
-	const { courseName, skillName } = page.params;
+export const load: PageServerLoad = async ({ params, url }) => {
+	const { courseName, skillName } = params;
 
 	if (courseName === 'preview') {
-		const skillNameFromQuery = page.url.searchParams.get('skillName');
+		const skillNameFromQuery = url.searchParams.get('skillName') ?? skillName;
 
 		return {
 			loading: true,
+			courseName,
+			skillName,
+			title: skillName,
+			practiceHref: skillNameFromQuery,
+			readmeHTML: '',
 			preview: {
 				type: skillName,
 				skillName: skillNameFromQuery
@@ -82,4 +88,4 @@ export async function load(page) {
 		courseName,
 		title: skillName
 	};
-}
+};

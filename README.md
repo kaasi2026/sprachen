@@ -11,7 +11,7 @@ Here there is an article of [why the original author has built LibreLingo](https
 # Why LibreLingoRelive?
 LibreLingo is/was an open-source language learning platform originally created by Dániel Kántor. Due to technical issues with the Svelte framework, the project became non-functional a few years ago. Greg later forked the project as LibreLingoCommunity, successfully reviving it. However, due to time constraints, this version also stopped working. In November 2025, we decided to revive LibreLingo once again. We forked the project from LibreLingoCommunity (a fork of a fork) and are now actively maintaining and improving it.
 
-# Documentation
+# 📙 Documentation
 
 Please read: [LibreLingoRelive Docs](https://codeberg.org/LibreLingoRelive/LibreLingoRelive_Docs)    
 
@@ -72,7 +72,7 @@ docker compose exec librelingo python3 src/librelingo_audios/cli.py /data/course
 The service should be available under http://localhost:5173
 ```
 
-## Contribution
+# 🙏 Contribution
 
 You can contribute by:
 
@@ -80,6 +80,6 @@ You can contribute by:
 * Help us writing the [Documentation](https://codeberg.org/LibreLingoRelive/LibreLingoRelive_Docs)
 * Create your own language course and set it up [Read the Documentation](https://codeberg.org/LibreLingoRelive/LibreLingoRelive_Docs)
 
-## License
+## 🪪 License
 
 LibreLingoRelive is licensed under the AGPL-3.0 license. In addition, course content and other creative content might be licensed under different licenses, such as CC. 

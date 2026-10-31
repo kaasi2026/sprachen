@@ -1,4 +1,4 @@
-# LibreLingoRelive
+# LibreLingoRelive <img src="https://codeberg.org/LibreLingoRelive/LibreLingoRelive/raw/commit/ffb7dd1a3637cb20fdffb7ea29b8029b23839bfd/apps/web/static/images/LibreLingoRelive_transparent.png" width="100" height="100" alt="LibreLingoRelive">
 *a community-owned language-learning platform*
 
 > [!CAUTION]
